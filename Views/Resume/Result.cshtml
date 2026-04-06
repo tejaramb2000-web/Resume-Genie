@@ -1,0 +1,41 @@
+@model ResumeTailorApp.Models.Resume
+
+@{
+    ViewData["Title"] = "Resume Submitted";
+}
+
+<section class="page-container">
+
+    <!-- Header -->
+    <div class="page-header">
+        <h1>Resume Submitted</h1>
+        <p>Your resume has been saved successfully. You can now use it for matching.</p>
+    </div>
+
+    <!-- Card -->
+    <div class="card">
+
+        <!-- Title -->
+        <div class="card-section">
+            <label class="label">Resume Title</label>
+            <div class="value">@Model.Title</div>
+        </div>
+
+        <!-- Content -->
+        <div class="card-section">
+            <label class="label">Resume Content</label>
+
+            <div class="content-preview">
+                @Model.Content
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="card-actions">
+            <a href="/Match" class="btn-primary">Match with Job</a>
+            <a href="/Resumes" class="btn-secondary">Back to Resumes</a>
+        </div>
+
+    </div>
+
+</section>

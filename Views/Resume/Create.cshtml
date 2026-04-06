@@ -1,0 +1,51 @@
+@model ResumeTailorApp.Models.Resume
+
+@{
+    ViewData["Title"] = "Add Resume";
+}
+
+<section class="form-page">
+    <div class="container">
+
+        <div class="form-header">
+            <h1>Add Your Resume</h1>
+            <p>Upload your resume or paste the content to start optimizing it for job applications.</p>
+        </div>
+
+        <div class="form-card">
+
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
+
+                <div class="form-group">
+                    <label>Resume Title</label>
+                    <input asp-for="Title" class="form-input" placeholder="e.g. Senior .NET Developer Resume" />
+                </div>
+
+                <div class="form-group">
+                    <label>Upload Resume File</label>
+                    <div class="upload-box">
+                        <input type="file" name="file" />
+                        <p>.txt, .docx, or .pdf</p>
+                    </div>
+                </div>
+
+                <div class="divider">OR</div>
+
+                <div class="form-group">
+                    <label>Paste Resume Content</label>
+                    <textarea asp-for="Content" class="form-textarea" rows="10"
+                              placeholder="Paste your resume content here..."></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">
+                        Save Resume and Continue →
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+</section>

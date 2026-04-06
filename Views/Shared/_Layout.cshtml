@@ -1,0 +1,225 @@
+﻿@{
+    var userId = Context.Session.GetInt32("UserId");
+    var userName = Context.Session.GetString("UserName") ?? "User";
+    var isLoggedIn = userId.HasValue;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Resume Genie</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <style>
+        :root {
+            --rg-primary: #2563eb;
+            --rg-primary-dark: #1d4ed8;
+            --rg-text: #0f172a;
+            --rg-muted: #64748b;
+            --rg-border: #e2e8f0;
+            --rg-bg: #f8fafc;
+            --rg-card: #ffffff;
+        }
+
+        html {
+            font-size: 16px;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--rg-text);
+            background: #ffffff;
+        }
+
+        .rg-navbar {
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid var(--rg-border);
+            backdrop-filter: blur(8px);
+            padding: 0.95rem 0;
+        }
+
+        .rg-brand {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--rg-text) !important;
+            text-decoration: none;
+            letter-spacing: -0.4px;
+        }
+
+        .rg-brand span {
+            color: var(--rg-primary);
+        }
+
+        .rg-nav-link {
+            color: var(--rg-text) !important;
+            font-weight: 500;
+            margin-right: 1rem;
+            text-decoration: none;
+        }
+
+        .rg-nav-link:hover {
+            color: var(--rg-primary) !important;
+        }
+
+        .rg-btn-outline {
+            border: 1px solid var(--rg-border);
+            color: var(--rg-text);
+            background: #fff;
+            padding: 0.7rem 1.1rem;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .rg-btn-outline:hover {
+            border-color: #cbd5e1;
+            color: var(--rg-text);
+            background: #f8fafc;
+        }
+
+        .rg-btn-primary {
+            background: var(--rg-primary);
+            color: #fff;
+            padding: 0.75rem 1.15rem;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            border: none;
+        }
+
+        .rg-btn-primary:hover {
+            background: var(--rg-primary-dark);
+            color: #fff;
+        }
+
+        .rg-user-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: .5rem .9rem;
+            border-radius: 999px;
+            background: #eff6ff;
+            color: #2563eb;
+            font-weight: 700;
+            font-size: .9rem;
+        }
+
+        .rg-page-wrapper {
+            min-height: calc(100vh - 82px);
+        }
+
+        .rg-footer {
+            border-top: 1px solid var(--rg-border);
+            padding: 1.25rem 0;
+            color: var(--rg-muted);
+            font-size: 0.95rem;
+            background: #fff;
+        }
+
+        .rg-footer a {
+            color: var(--rg-muted);
+            text-decoration: none;
+            margin-left: 1rem;
+        }
+
+        .rg-footer a:hover {
+            color: var(--rg-primary);
+        }
+
+        @@media (max-width: 991.98px) {
+            .rg-nav-link {
+                margin-right: 0;
+                margin-bottom: 0.75rem;
+                display: block;
+            }
+
+            .rg-nav-actions {
+                margin-top: 0.75rem;
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .rg-nav-actions a,
+            .rg-nav-actions button {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg rg-navbar">
+            <div class="container">
+                <a class="navbar-brand rg-brand" href="/">Resume<span>Genie</span></a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav mx-auto align-items-lg-center">
+                        <li class="nav-item">
+                            <a class="rg-nav-link" href="/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="rg-nav-link" href="/Resume/List">Resumes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="rg-nav-link" href="/Job/List">Jobs</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="rg-nav-link" href="/Match">Match</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="rg-nav-link" href="/ResumeVersion/List">Versions</a>
+                        </li>
+                    </ul>
+
+                    <div class="rg-nav-actions d-lg-flex align-items-center gap-2">
+                        @if (isLoggedIn)
+                        {
+                            <span class="rg-user-badge">@userName</span>
+
+                            <form method="post" action="/Account/Logout" style="display:inline;">
+                                <button type="submit" class="rg-btn-outline">Logout</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <a href="/Account/Login" class="rg-btn-outline">Sign In</a>
+                            <a href="/Account/Register" class="rg-btn-primary">Get Started Free</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="rg-page-wrapper">
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="rg-footer">
+        <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
+            <div>© @DateTime.Now.Year Resume Genie. Built to tailor resumes faster.</div>
+            <div class="mt-2 mt-md-0">
+                <a href="#">Privacy</a>
+                <a href="#">Contact</a>
+                <a href="#">Terms</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

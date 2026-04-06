@@ -1,0 +1,360 @@
+@model ResumeTailorApp.Models.RewriteResult
+
+@{
+    ViewData["Title"] = "AI Resume Rewrite";
+}
+
+<style>
+    :root {
+        --rg-primary: #2563eb;
+        --rg-primary-dark: #1d4ed8;
+        --rg-text: #0f172a;
+        --rg-muted: #64748b;
+        --rg-border: #e2e8f0;
+        --rg-card: #ffffff;
+        --rg-soft: #f8fafc;
+        --rg-shadow: 0 25px 50px rgba(15, 23, 42, 0.08);
+        --rg-success: #16a34a;
+        --rg-success-bg: #ecfdf3;
+    }
+
+    .rewrite-page {
+        padding: 48px 0 70px;
+        background: linear-gradient(to bottom, #ffffff, #f8fbff);
+        min-height: calc(100vh - 160px);
+    }
+
+    .rewrite-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+    }
+
+    .rewrite-header h1 {
+        font-size: 2.1rem;
+        font-weight: 800;
+        letter-spacing: -0.8px;
+        margin-bottom: 0.5rem;
+        color: var(--rg-text);
+    }
+
+    .rewrite-header p {
+        color: var(--rg-muted);
+        margin: 0;
+        line-height: 1.7;
+        max-width: 760px;
+    }
+
+    .rewrite-card {
+        background: var(--rg-card);
+        border: 1px solid var(--rg-border);
+        border-radius: 24px;
+        box-shadow: var(--rg-shadow);
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .rewrite-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .meta-pill {
+        padding: 0.45rem 0.8rem;
+        border-radius: 999px;
+        background: #eff6ff;
+        color: var(--rg-primary);
+        font-weight: 700;
+        font-size: 0.9rem;
+        border: 1px solid #dbeafe;
+    }
+
+    .rewrite-summary {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.85rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .summary-pill {
+        padding: 0.5rem 0.85rem;
+        border-radius: 999px;
+        background: var(--rg-success-bg);
+        color: var(--rg-success);
+        font-weight: 700;
+        font-size: 0.88rem;
+        border: 1px solid #bbf7d0;
+    }
+
+    .rewrite-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+
+    .rewrite-panel {
+        display: flex;
+        flex-direction: column;
+        min-height: 540px;
+    }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.6rem;
+    }
+
+    .panel-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--rg-text);
+    }
+
+    .panel-badge {
+        font-size: 0.85rem;
+        font-weight: 700;
+        padding: 0.35rem 0.65rem;
+        border-radius: 999px;
+    }
+
+    .badge-original {
+        background: #f1f5f9;
+        color: #475569;
+    }
+
+    .badge-ai {
+        background: #ecfdf3;
+        color: var(--rg-success);
+    }
+
+    .content-box {
+        flex: 1;
+        border: 1px solid var(--rg-border);
+        border-radius: 16px;
+        background: var(--rg-soft);
+        padding: 1.2rem;
+        overflow: auto;
+        min-height: 480px;
+        max-height: 640px;
+    }
+
+    .resume-preview {
+        margin: 0;
+        white-space: pre-wrap;
+        word-break: break-word;
+        font-family: Calibri, Arial, sans-serif;
+        font-size: 11pt;
+        line-height: 1.2;
+        color: #334155;
+    }
+
+    .resume-preview * {
+        white-space: inherit;
+        word-break: inherit;
+        font-family: inherit;
+        font-size: inherit;
+        line-height: inherit;
+    }
+
+    .diff-line {
+        padding: 0.38rem 0.55rem;
+        border-radius: 8px;
+        margin-bottom: 0.2rem;
+        white-space: pre-wrap;
+        line-height: 1.65;
+        color: #334155;
+        background: transparent;
+    }
+
+    .diff-added {
+        background: #dcfce7;
+        border-left: 4px solid #16a34a;
+        color: #14532d;
+        font-weight: 600;
+    }
+
+    .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.9rem;
+        margin-top: 1rem;
+        color: var(--rg-muted);
+        font-size: 0.92rem;
+    }
+
+    .legend-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+    }
+
+    .legend-box {
+        width: 18px;
+        height: 18px;
+        border-radius: 5px;
+        border: 1px solid var(--rg-border);
+        background: #fff;
+    }
+
+    .legend-box-added {
+        background: #dcfce7;
+        border-left: 4px solid #16a34a;
+        width: 18px;
+        height: 18px;
+        border-radius: 4px;
+    }
+
+    .rewrite-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.85rem;
+        margin-top: 1.5rem;
+    }
+
+    .btn-primary-custom {
+        background: var(--rg-primary);
+        color: #fff;
+        border: none;
+        padding: 0.9rem 1.25rem;
+        border-radius: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-primary-custom:hover {
+        background: var(--rg-primary-dark);
+        color: #fff;
+    }
+
+    .btn-outline-custom {
+        background: #fff;
+        color: var(--rg-text);
+        border: 1px solid var(--rg-border);
+        padding: 0.9rem 1.25rem;
+        border-radius: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-outline-custom:hover {
+        background: #f8fafc;
+        color: var(--rg-text);
+    }
+
+    @@media (max-width: 991.98px) {
+        .rewrite-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .rewrite-header h1 {
+            font-size: 1.8rem;
+        }
+
+        .rewrite-panel {
+            min-height: auto;
+        }
+
+        .content-box {
+            min-height: 320px;
+            max-height: 480px;
+        }
+    }
+
+    @@media (max-width: 767.98px) {
+        .rewrite-page {
+            padding: 32px 0 56px;
+        }
+    }
+</style>
+
+<section class="rewrite-page">
+    <div class="container">
+        <div class="rewrite-header">
+            <div>
+                <h1>AI Resume Rewrite</h1>
+                <p>
+                    Compare your original resume with the AI-optimized version. Highlighted lines on the right show where the rewritten version changed.
+                </p>
+            </div>
+
+            <a href="/Match" class="btn-outline-custom">Back to Match</a>
+        </div>
+
+        <div class="rewrite-card">
+            <div class="rewrite-meta">
+                <span class="meta-pill">@Model.ResumeTitle</span>
+                <span class="meta-pill">@Model.JobTitle</span>
+            </div>
+
+            <div class="rewrite-summary">
+                <span class="summary-pill">AI rewrite completed</span>
+                <span class="summary-pill">Changed lines highlighted</span>
+            </div>
+
+            <div class="rewrite-grid">
+                <div class="rewrite-panel">
+                    <div class="panel-header">
+                        <div class="panel-title">Original Resume</div>
+                        <span class="panel-badge badge-original">Before</span>
+                    </div>
+
+                    <div class="content-box">
+                        <div class="resume-preview">
+                            @Html.Raw(Model.OriginalContentHtml)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rewrite-panel">
+                    <div class="panel-header">
+                        <div class="panel-title">AI Optimized Resume</div>
+                        <span class="panel-badge badge-ai">After</span>
+                    </div>
+
+                    <div class="content-box">
+                        <div class="resume-preview">
+                            @Html.Raw(Model.RewrittenContentHtml)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="legend">
+                <span class="legend-item">
+                    <span class="legend-box"></span>
+                    Unchanged line
+                </span>
+                <span class="legend-item">
+                    <span class="legend-box-added"></span>
+                    Changed or added in rewritten version
+                </span>
+            </div>
+
+            <div class="rewrite-actions">
+
+    <form method="post" action="/Match/DownloadPdf" style="display:inline-block;">
+        <input type="hidden" name="resumeText" value="@Model.RewrittenContentText" />
+        <input type="hidden" name="title" value="@Model.ResumeTitle" />
+        <button type="submit" class="btn-primary-custom">Download PDF</button>
+    </form>
+
+    <form method="post" action="/Match/DownloadDocx" style="display:inline-block;">
+        <input type="hidden" name="resumeText" value="@Model.RewrittenContentText" />
+        <button type="submit" class="btn-outline-custom">Download DOCX</button>
+    </form>
+
+    <a href="/Resume/List" class="btn-outline-custom">View Resumes</a>
+    <a href="/Match" class="btn-outline-custom">Run Another Match</a>
+
+</div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,546 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<style>
+    :root {
+        --rg-primary: #2563eb;
+        --rg-primary-dark: #1d4ed8;
+        --rg-text: #0f172a;
+        --rg-muted: #64748b;
+        --rg-border: #e2e8f0;
+        --rg-bg-soft: #f8fafc;
+        --rg-success: #16a34a;
+    }
+
+    .hero-section {
+        padding: 90px 0 70px;
+        background:
+            radial-gradient(circle at top right, rgba(37, 99, 235, 0.08), transparent 28%),
+            linear-gradient(to bottom, #ffffff, #f8fbff);
+    }
+
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: #eff6ff;
+        color: var(--rg-primary);
+        border: 1px solid #dbeafe;
+        border-radius: 999px;
+        padding: 0.45rem 0.9rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+    }
+
+    .hero-title {
+        font-size: 3.4rem;
+        line-height: 1.08;
+        font-weight: 800;
+        letter-spacing: -1.4px;
+        color: var(--rg-text);
+        margin-bottom: 1.25rem;
+    }
+
+    .hero-title .text-primary-custom {
+        color: var(--rg-primary);
+    }
+
+    .hero-subtitle {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: var(--rg-muted);
+        max-width: 620px;
+        margin-bottom: 2rem;
+    }
+
+    .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .btn-main {
+        background: var(--rg-primary);
+        color: #fff;
+        border: none;
+        padding: 0.95rem 1.4rem;
+        border-radius: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-block;
+        box-shadow: 0 12px 24px rgba(37, 99, 235, 0.18);
+    }
+
+    .btn-main:hover {
+        background: var(--rg-primary-dark);
+        color: #fff;
+    }
+
+    .btn-secondary-clean {
+        background: #fff;
+        color: var(--rg-text);
+        border: 1px solid var(--rg-border);
+        padding: 0.95rem 1.4rem;
+        border-radius: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-secondary-clean:hover {
+        color: var(--rg-text);
+        background: #f8fafc;
+    }
+
+    .hero-points {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.25rem;
+        color: var(--rg-muted);
+        font-size: 0.95rem;
+        font-weight: 500;
+    }
+
+    .hero-points span::before {
+        content: "✓";
+        color: var(--rg-success);
+        margin-right: 0.45rem;
+        font-weight: 700;
+    }
+
+    .hero-card {
+        background: #fff;
+        border: 1px solid var(--rg-border);
+        border-radius: 24px;
+        padding: 1.5rem;
+        box-shadow: 0 30px 60px rgba(15, 23, 42, 0.08);
+    }
+
+    .mock-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.25rem;
+    }
+
+    .mock-title {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--rg-text);
+        margin: 0;
+    }
+
+    .match-score {
+        background: #ecfdf3;
+        color: #15803d;
+        border: 1px solid #bbf7d0;
+        padding: 0.45rem 0.8rem;
+        border-radius: 999px;
+        font-weight: 700;
+        font-size: 0.9rem;
+    }
+
+    .resume-block,
+    .job-block,
+    .improvement-block {
+        border: 1px solid var(--rg-border);
+        border-radius: 16px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        background: #fff;
+    }
+
+    .block-label {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--rg-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        margin-bottom: 0.75rem;
+    }
+
+    .line {
+        height: 10px;
+        border-radius: 999px;
+        background: #e2e8f0;
+        margin-bottom: 0.6rem;
+    }
+
+    .line.sm {
+        width: 45%;
+    }
+
+    .line.md {
+        width: 70%;
+    }
+
+    .line.lg {
+        width: 100%;
+    }
+
+    .keyword-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        margin-top: 0.5rem;
+    }
+
+    .keyword {
+        padding: 0.45rem 0.75rem;
+        border-radius: 999px;
+        background: #eff6ff;
+        color: var(--rg-primary);
+        font-size: 0.88rem;
+        font-weight: 600;
+    }
+
+    .section-block {
+        padding: 80px 0;
+    }
+
+    .section-light {
+        background: var(--rg-bg-soft);
+        border-top: 1px solid #f1f5f9;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .section-heading {
+        text-align: center;
+        max-width: 720px;
+        margin: 0 auto 3rem;
+    }
+
+    .section-heading h2 {
+        font-size: 2.3rem;
+        font-weight: 800;
+        color: var(--rg-text);
+        margin-bottom: 1rem;
+        letter-spacing: -0.8px;
+    }
+
+    .section-heading p {
+        color: var(--rg-muted);
+        font-size: 1.05rem;
+        line-height: 1.8;
+        margin: 0;
+    }
+
+    .feature-card {
+        background: #fff;
+        border: 1px solid var(--rg-border);
+        border-radius: 20px;
+        padding: 1.75rem;
+        height: 100%;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+    }
+
+    .feature-icon {
+        width: 54px;
+        height: 54px;
+        border-radius: 14px;
+        background: #eff6ff;
+        color: var(--rg-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+
+    .feature-card h3 {
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+    }
+
+    .feature-card p {
+        color: var(--rg-muted);
+        line-height: 1.7;
+        margin: 0;
+    }
+
+    .step-card {
+        background: #fff;
+        border: 1px solid var(--rg-border);
+        border-radius: 20px;
+        padding: 1.75rem;
+        height: 100%;
+    }
+
+    .step-number {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: var(--rg-primary);
+        color: #fff;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+
+    .step-card h3 {
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+    }
+
+    .step-card p {
+        color: var(--rg-muted);
+        line-height: 1.7;
+        margin: 0;
+    }
+
+    .free-section-card {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        color: #fff;
+        border-radius: 28px;
+        padding: 3rem;
+        box-shadow: 0 30px 60px rgba(15, 23, 42, 0.18);
+    }
+
+    .free-section-card h2 {
+        font-size: 2.2rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+    }
+
+    .free-section-card p {
+        color: rgba(255,255,255,0.78);
+        font-size: 1.05rem;
+        line-height: 1.8;
+        margin-bottom: 1.75rem;
+        max-width: 720px;
+    }
+
+    .free-points {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .free-points span {
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.14);
+        color: #fff;
+        padding: 0.7rem 1rem;
+        border-radius: 999px;
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+
+    @@media (max-width: 991.98px) {
+        .hero-section {
+            padding: 70px 0 50px;
+        }
+
+        .hero-title {
+            font-size: 2.4rem;
+        }
+
+        .hero-card {
+            margin-top: 2.5rem;
+        }
+
+        .free-section-card {
+            padding: 2rem;
+        }
+    }
+
+    @@media (max-width: 575.98px) {
+        .hero-title {
+            font-size: 2rem;
+        }
+
+        .section-heading h2,
+        .free-section-card h2 {
+            font-size: 1.75rem;
+        }
+
+        .hero-actions {
+            flex-direction: column;
+        }
+
+        .hero-actions a {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <div class="hero-badge">Free AI resume tailoring for job applications</div>
+
+                <h1 class="hero-title">
+                    Turn your basic resume into a
+                    <span class="text-primary-custom">job-matched resume</span>
+                    in minutes
+                </h1>
+
+                <p class="hero-subtitle">
+                    Resume Genie helps students and job seekers tailor resumes based on the job description,
+                    improve keyword alignment, and create better versions for every application without paying for expensive tools.
+                </p>
+
+                <div class="hero-actions">
+                    <a href="/Resume/Create" class="btn-main">Upload Resume</a>
+                    <a href="/Job/Create" class="btn-secondary-clean">Paste Job Description</a>
+                </div>
+
+                <div class="hero-points">
+                    <span>Free to use</span>
+                    <span>ATS-focused</span>
+                    <span>Fast resume matching</span>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="hero-card">
+                    <div class="mock-header">
+                        <h3 class="mock-title">Resume Match Preview</h3>
+                        <div class="match-score">Match Score: 87%</div>
+                    </div>
+
+                    <div class="resume-block">
+                        <div class="block-label">Base Resume</div>
+                        <div class="line lg"></div>
+                        <div class="line md"></div>
+                        <div class="line lg"></div>
+                        <div class="line sm"></div>
+                    </div>
+
+                    <div class="job-block">
+                        <div class="block-label">Job Description Keywords</div>
+                        <div class="keyword-list">
+                            <span class="keyword">ASP.NET Core</span>
+                            <span class="keyword">SQL</span>
+                            <span class="keyword">REST APIs</span>
+                            <span class="keyword">Azure</span>
+                            <span class="keyword">Bootstrap</span>
+                        </div>
+                    </div>
+
+                    <div class="improvement-block mb-0">
+                        <div class="block-label">Suggested Improvements</div>
+                        <div class="line lg"></div>
+                        <div class="line lg"></div>
+                        <div class="line md"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-block">
+    <div class="container">
+        <div class="section-heading">
+            <h2>Everything you need to tailor your resume clearly and professionally</h2>
+            <p>
+                Built for job seekers who want a clean workflow: upload a resume, compare it with a job description,
+                improve alignment, and save better versions for each role.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card">
+                    <div class="feature-icon">01</div>
+                    <h3>Resume Upload</h3>
+                    <p>Start from your existing resume instead of rewriting everything from scratch.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card">
+                    <div class="feature-icon">02</div>
+                    <h3>Job Description Match</h3>
+                    <p>Compare your resume against the role and identify missing skills and keywords.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card">
+                    <div class="feature-icon">03</div>
+                    <h3>Tailored Versions</h3>
+                    <p>Create focused resume versions for different jobs without losing your base copy.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card">
+                    <div class="feature-icon">04</div>
+                    <h3>Cleaner Applications</h3>
+                    <p>Submit resumes that look more relevant, targeted, and better prepared for ATS review.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-block section-light">
+    <div class="container">
+        <div class="section-heading">
+            <h2>How Resume Genie works</h2>
+            <p>
+                Keep the process simple and focused so users can move from a basic resume to a stronger application fast.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Upload your resume</h3>
+                    <p>Add your current resume and keep it as your starting point for future job applications.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>Paste the job description</h3>
+                    <p>Bring in the target role so the app can compare keywords, requirements, and focus areas.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>Generate a better version</h3>
+                    <p>Review the match, improve relevance, and save a tailored resume version for that job.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-block">
+    <div class="container">
+        <div class="free-section-card">
+            <h2>Professional resume help without paid-tool complexity</h2>
+            <p>
+                Resume Genie is designed to stay simple, useful, and free. The goal is to give users a polished resume
+                tailoring workflow without clutter, confusion, or unnecessary upsells.
+            </p>
+
+            <div class="free-points">
+                <span>Free workflow</span>
+                <span>Simple UI</span>
+                <span>Student-friendly</span>
+                <span>Version-based approach</span>
+            </div>
+
+            <a href="/Resume/Create" class="btn-main">Start Free</a>
+        </div>
+    </div>
+</section>

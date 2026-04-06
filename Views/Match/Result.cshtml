@@ -1,0 +1,343 @@
+@model ResumeTailorApp.Models.MatchResult
+
+@{
+    ViewData["Title"] = "Match Result";
+}
+
+<style>
+    :root {
+        --rg-primary: #2563eb;
+        --rg-primary-dark: #1d4ed8;
+        --rg-text: #0f172a;
+        --rg-muted: #64748b;
+        --rg-border: #e2e8f0;
+        --rg-card: #ffffff;
+        --rg-soft: #f8fafc;
+        --rg-shadow: 0 20px 40px rgba(15, 23, 42, 0.06);
+        --rg-success-bg: #ecfdf3;
+        --rg-success-text: #15803d;
+        --rg-warning-bg: #fff7ed;
+        --rg-warning-text: #c2410c;
+    }
+
+    .result-page {
+        padding: 48px 0 70px;
+        background: linear-gradient(to bottom, #ffffff, #f8fbff);
+        min-height: calc(100vh - 160px);
+    }
+
+    .result-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+    }
+
+    .result-header h1 {
+        font-size: 2.1rem;
+        font-weight: 800;
+        letter-spacing: -0.8px;
+        margin-bottom: 0.5rem;
+        color: var(--rg-text);
+    }
+
+    .result-header p {
+        color: var(--rg-muted);
+        margin: 0;
+        line-height: 1.7;
+    }
+
+    .result-top-card,
+    .result-panel {
+        background: var(--rg-card);
+        border: 1px solid var(--rg-border);
+        border-radius: 22px;
+        box-shadow: var(--rg-shadow);
+    }
+
+    .result-top-card {
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .result-score-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .result-score-label {
+        color: var(--rg-muted);
+        font-weight: 600;
+    }
+
+    .result-score-number {
+        font-size: 3rem;
+        font-weight: 800;
+        color: var(--rg-text);
+        line-height: 1;
+        margin-top: 0.5rem;
+    }
+
+    .result-score-meta {
+        margin-top: 0.6rem;
+        color: var(--rg-muted);
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    .result-pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.55rem 0.9rem;
+        border-radius: 999px;
+        background: #eff6ff;
+        color: var(--rg-primary);
+        font-weight: 700;
+        border: 1px solid #dbeafe;
+    }
+
+    .score-bar-wrap {
+        width: 100%;
+        height: 14px;
+        background: #e2e8f0;
+        border-radius: 999px;
+        overflow: hidden;
+        margin-top: 1rem;
+    }
+
+    .score-bar {
+        height: 100%;
+        background: linear-gradient(to right, #2563eb, #60a5fa);
+        border-radius: 999px;
+    }
+
+    .result-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .result-panel {
+        padding: 1.5rem;
+    }
+
+    .result-panel h2 {
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--rg-text);
+    }
+
+    .tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.7rem;
+    }
+
+    .tag-success,
+    .tag-warning {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 0.5rem 0.8rem;
+        font-size: 0.9rem;
+        font-weight: 700;
+    }
+
+    .tag-success {
+        background: var(--rg-success-bg);
+        color: var(--rg-success-text);
+        border: 1px solid #bbf7d0;
+    }
+
+    .tag-warning {
+        background: var(--rg-warning-bg);
+        color: var(--rg-warning-text);
+        border: 1px solid #fed7aa;
+    }
+
+    .suggestion-list {
+        margin: 0;
+        padding-left: 1.1rem;
+        color: #334155;
+    }
+
+    .suggestion-list li {
+        margin-bottom: 0.75rem;
+        line-height: 1.7;
+    }
+
+    .action-row {
+        margin-top: 1.5rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.85rem;
+        align-items: center;
+    }
+
+    .rewrite-form {
+        margin: 0;
+    }
+
+    .btn-primary-custom {
+        background: var(--rg-primary);
+        color: #fff;
+        border: none;
+        padding: 0.9rem 1.25rem;
+        border-radius: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-primary-custom:hover {
+        background: var(--rg-primary-dark);
+        color: #fff;
+    }
+
+    .btn-outline-custom {
+        background: #fff;
+        color: var(--rg-text);
+        border: 1px solid var(--rg-border);
+        padding: 0.9rem 1.25rem;
+        border-radius: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-outline-custom:hover {
+        background: #f8fafc;
+        color: var(--rg-text);
+    }
+
+    .empty-box {
+        padding: 1rem;
+        border: 1px dashed var(--rg-border);
+        border-radius: 14px;
+        color: var(--rg-muted);
+        background: var(--rg-soft);
+    }
+
+    @@media (max-width: 991.98px) {
+        .result-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .result-header h1 {
+            font-size: 1.8rem;
+        }
+
+        .result-score-number {
+            font-size: 2.4rem;
+        }
+    }
+
+    @@media (max-width: 767.98px) {
+        .result-page {
+            padding: 32px 0 56px;
+        }
+    }
+</style>
+
+<section class="result-page">
+    <div class="container">
+        <div class="result-header">
+            <div>
+                <h1>Match Analysis Result</h1>
+                <p>@Model.ResumeTitle matched against @Model.JobTitle</p>
+            </div>
+            <a href="/Match" class="btn-outline-custom">Back to Match</a>
+        </div>
+
+        <div class="result-top-card">
+            <div class="result-score-row">
+                <div>
+                    <div class="result-score-label">Overall Match Score</div>
+                    <div class="result-score-number">@Model.Score%</div>
+                    <div class="result-score-meta">
+                        @Model.MatchedKeywords.Count matched • @Model.MissingKeywords.Count missing
+                    </div>
+                </div>
+
+                <div class="result-pill">Keyword Match Analysis</div>
+            </div>
+
+            <div class="score-bar-wrap">
+                <div class="score-bar" style="width:@Model.Score%;"></div>
+            </div>
+
+            <div class="action-row">
+                <form method="post" action="/Match/Rewrite" class="rewrite-form">
+                    <input type="hidden" name="resumeId" value="@Model.ResumeId" />
+                    <input type="hidden" name="jobId" value="@Model.JobId" />
+                    <button type="submit" class="btn-primary-custom">Rewrite Resume</button>
+                </form>
+
+                <a href="/Match" class="btn-outline-custom">Run Another Match</a>
+            </div>
+        </div>
+
+        <div class="result-grid">
+            <div class="result-panel">
+                <h2>Matched Keywords</h2>
+
+                @if (Model.MatchedKeywords != null && Model.MatchedKeywords.Any())
+                {
+                    <div class="tag-list">
+                        @foreach (var keyword in Model.MatchedKeywords)
+                        {
+                            <span class="tag-success">@keyword</span>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="empty-box">No matched keywords found.</div>
+                }
+            </div>
+
+            <div class="result-panel">
+                <h2>Missing Keywords</h2>
+
+                @if (Model.MissingKeywords != null && Model.MissingKeywords.Any())
+                {
+                    <div class="tag-list">
+                        @foreach (var keyword in Model.MissingKeywords)
+                        {
+                            <span class="tag-warning">@keyword</span>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="empty-box">No missing keywords found.</div>
+                }
+            </div>
+        </div>
+
+        <div class="result-panel">
+            <h2>Suggestions</h2>
+
+            @if (Model.Suggestions != null && Model.Suggestions.Any())
+            {
+                <ul class="suggestion-list">
+                    @foreach (var suggestion in Model.Suggestions)
+                    {
+                        <li>@suggestion</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <div class="empty-box">No suggestions available.</div>
+            }
+        </div>
+    </div>
+</section>

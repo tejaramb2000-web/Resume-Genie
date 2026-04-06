@@ -1,0 +1,184 @@
+@model List<ResumeTailorApp.Models.ResumeVersion>
+@{
+    ViewData["Title"] = "Version History";
+}
+
+<style>
+    .page-wrap {
+        padding: 48px 0 70px;
+        background: linear-gradient(to bottom, #ffffff, #f8fbff);
+        min-height: calc(100vh - 160px);
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+    }
+
+    .page-header h1 {
+        font-size: 2.1rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: .4rem;
+    }
+
+    .page-header p {
+        color: #64748b;
+        margin: 0;
+        line-height: 1.7;
+    }
+
+    .table-card {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 22px;
+        box-shadow: 0 20px 40px rgba(15,23,42,.06);
+        overflow: hidden;
+    }
+
+    .table-wrap {
+        overflow-x: auto;
+    }
+
+    .table-custom {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table-custom th {
+        background: #f8fafc;
+        color: #64748b;
+        padding: 1rem 1.25rem;
+        text-transform: uppercase;
+        font-size: .85rem;
+        letter-spacing: .4px;
+    }
+
+    .table-custom td {
+        padding: 1.15rem 1.25rem;
+        border-bottom: 1px solid #eef2f7;
+        vertical-align: top;
+    }
+
+    .table-custom tr:last-child td {
+        border-bottom: none;
+    }
+
+    .version-title {
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: .2rem;
+    }
+
+    .subtext {
+        color: #64748b;
+        font-size: .92rem;
+    }
+
+    .pill {
+        display: inline-flex;
+        padding: .4rem .7rem;
+        border-radius: 999px;
+        background: #eff6ff;
+        color: #2563eb;
+        font-weight: 700;
+        font-size: .85rem;
+    }
+
+    .btn-small {
+        display: inline-block;
+        text-decoration: none;
+        font-weight: 700;
+        padding: .55rem .85rem;
+        border-radius: 10px;
+        margin-right: .45rem;
+        margin-bottom: .45rem;
+    }
+
+    .btn-small-primary {
+        background: #2563eb;
+        color: #fff;
+    }
+
+    .btn-small-primary:hover {
+        background: #1d4ed8;
+        color: #fff;
+    }
+
+    .btn-small-outline {
+        background: #fff;
+        color: #0f172a;
+        border: 1px solid #e2e8f0;
+    }
+
+    .btn-small-outline:hover {
+        background: #f8fafc;
+        color: #0f172a;
+    }
+</style>
+
+<section class="page-wrap">
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h1>Version History</h1>
+                <p>Browse all AI-generated resume versions and download them in different formats.</p>
+            </div>
+
+            <a href="/Match" class="btn-small btn-small-primary">Create New Version</a>
+        </div>
+
+        <div class="table-card">
+            <div class="table-wrap">
+                <table class="table-custom">
+                    <thead>
+                        <tr>
+                            <th>Job Title</th>
+                            <th>Created</th>
+                            <th>Status</th>
+                            <th>Downloads</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="version-title">@item.JobTitle</div>
+                                        <div class="subtext">AI tailored resume version</div>
+                                    </td>
+                                    <td>
+                                        <div class="version-title">@item.CreatedAt.ToString("MMM dd, yyyy")</div>
+                                        <div class="subtext">@item.CreatedAt.ToString("hh:mm tt")</div>
+                                    </td>
+                                    <td>
+                                        <span class="pill">Saved</span>
+                                    </td>
+                                    <td>
+                                        <a href="/ResumeVersion/DownloadTxt/@item.Id" class="btn-small btn-small-outline">TXT</a>
+                                        <a href="/ResumeVersion/DownloadDocx/@item.Id" class="btn-small btn-small-outline">DOCX</a>
+                                        <a href="/ResumeVersion/DownloadPdf/@item.Id" class="btn-small btn-small-primary">PDF</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" style="text-align:center; color:#64748b; padding:2rem;">
+                                    No resume versions saved yet.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>

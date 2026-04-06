@@ -1,0 +1,51 @@
+@model ResumeTailorApp.Models.Job
+
+@{
+    ViewData["Title"] = "Add Job Description";
+}
+
+<section class="form-page">
+    <div class="container">
+
+        <div class="form-header">
+            <h1>Add Job Description</h1>
+            <p>Save a target role and job description so you can analyze match score and generate a tailored resume version.</p>
+        </div>
+
+        <div class="form-card">
+
+            <form asp-action="Create" method="post">
+
+                <div class="form-group">
+                    <label>Job Title</label>
+                    <input asp-for="Title" class="form-input" placeholder="e.g. Senior Data Engineer" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Job Description</label>
+                    <textarea asp-for="Description"
+                              class="form-textarea"
+                              rows="12"
+                              placeholder="Paste the full job description here..."></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">
+                        Save Job and Continue →
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+</section>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,55 @@
+@model ResumeTailorApp.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Sign In";
+}
+
+<style>
+    .auth-page { padding: 60px 0 80px; background: linear-gradient(to bottom, #ffffff, #f8fbff); min-height: calc(100vh - 160px); }
+    .auth-card { max-width: 520px; margin: 0 auto; background: #fff; border: 1px solid #e2e8f0; border-radius: 24px; padding: 2rem; box-shadow: 0 20px 40px rgba(15, 23, 42, 0.06); }
+    .auth-title { font-size: 2rem; font-weight: 800; color: #0f172a; margin-bottom: .5rem; }
+    .auth-subtitle { color: #64748b; margin-bottom: 1.5rem; line-height: 1.7; }
+    .auth-label { display: block; font-weight: 700; margin-bottom: .55rem; color: #0f172a; }
+    .auth-input { width: 100%; border: 1px solid #e2e8f0; border-radius: 14px; padding: .95rem 1rem; margin-bottom: 1rem; }
+    .auth-btn { width: 100%; background: #2563eb; color: #fff; border: none; border-radius: 12px; padding: .95rem 1rem; font-weight: 700; }
+    .auth-btn:hover { background: #1d4ed8; }
+    .auth-link { color: #2563eb; text-decoration: none; font-weight: 600; }
+    .validation-summary-errors ul { margin: 0 0 1rem 1rem; color: #b91c1c; }
+    .field-validation-error { color: #b91c1c; font-size: .9rem; }
+    .success-box { background: #ecfdf3; color: #166534; border: 1px solid #bbf7d0; padding: .8rem 1rem; border-radius: 12px; margin-bottom: 1rem; }
+</style>
+
+<section class="auth-page">
+    <div class="container">
+        <div class="auth-card">
+            <div class="auth-title">Sign in</div>
+            <div class="auth-subtitle">Access your dashboard, saved resumes, job descriptions, and AI-generated versions.</div>
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="success-box">@TempData["SuccessMessage"]</div>
+            }
+
+            @Html.ValidationSummary(false)
+
+            <form method="post">
+                <label asp-for="Email" class="auth-label"></label>
+                <input asp-for="Email" class="auth-input" />
+                <span asp-validation-for="Email"></span>
+
+                <label asp-for="Password" class="auth-label"></label>
+                <input asp-for="Password" class="auth-input" />
+                <span asp-validation-for="Password"></span>
+
+                <button type="submit" class="auth-btn">Sign In</button>
+            </form>
+
+            <div style="margin-top:1rem; color:#64748b;">
+                New here? <a href="/Account/Register" class="auth-link">Create an account</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

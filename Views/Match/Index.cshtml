@@ -1,0 +1,127 @@
+@{
+    ViewData["Title"] = "Resume Match";
+
+    var resumes = ViewBag.Resumes as List<ResumeTailorApp.Models.Resume> ?? new List<ResumeTailorApp.Models.Resume>();
+    var jobs = ViewBag.Jobs as List<ResumeTailorApp.Models.Job> ?? new List<ResumeTailorApp.Models.Job>();
+
+    var hasJobs = jobs.Any();
+}
+
+<section class="match-page">
+    <div class="container">
+
+        <!-- Header -->
+        <div class="match-header">
+            <h1>Resume Match</h1>
+            <p>
+                Compare your resume with a job description to identify missing keywords and improve alignment.
+            </p>
+        </div>
+
+        <div class="match-layout">
+
+            <!-- LEFT -->
+            <div class="match-card">
+
+                <h2>Run a new match</h2>
+                <p class="match-sub">Choose a resume and job description to begin.</p>
+
+                <form method="post">
+
+                    <!-- Resume -->
+                    <div class="form-group">
+                        <label>Select Resume</label>
+                        <select name="resumeId" class="form-input" required>
+                            <option value="">Choose a resume</option>
+                            @foreach (var r in resumes)
+                            {
+                                <option value="@r.Id">@r.Title</option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Job -->
+                    <div class="form-group">
+                        <label>Select Job</label>
+
+                        @if (!hasJobs)
+                        {
+                            <div class="empty-inline" style="padding:16px;">
+    <strong>No jobs added yet.</strong><br />
+    Add a job description to continue matching.
+
+    <div style="margin-top:12px;">
+        <a href="/Job/Create"
+   class="btn-primary"
+   style="padding10x 16x; font-size:14px; display:inline-block;">
+    + Add Job Description
+</a>
+    </div>
+</div>
+                        }
+                        else
+                        {
+                            <select name="jobId" class="form-input" required>
+                                <option value="">Choose a job</option>
+                                @foreach (var j in jobs)
+                                {
+                                    <option value="@j.Id">@j.Title</option>
+                                }
+                            </select>
+                        }
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="match-actions">
+
+                        <button type="submit"
+        formaction="/Match/Analyze"
+        class="btn-primary"
+        @(hasJobs ? "" : "disabled")
+        style="opacity:@(hasJobs ? "1" : "0.5"); cursor:@(hasJobs ? "pointer" : "not-allowed");">
+    Analyze Match
+</button>
+
+                        <button type="submit"
+        formaction="/Match/Rewrite"
+        class="btn-outline"
+        @(hasJobs ? "" : "disabled")
+        style="min-width:140px;">
+    Rewrite Resume
+</button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            <!-- RIGHT -->
+            <div class="match-side">
+
+                <div class="match-stat">
+                    <div>Available Resumes</div>
+                    <strong>@resumes.Count</strong>
+                </div>
+
+                <div class="match-stat">
+                    <div>Saved Jobs</div>
+                    <strong>@jobs.Count</strong>
+                </div>
+
+                <div class="match-tip">
+                    <strong>How it works</strong>
+                    <ul>
+                        <li>Select a resume</li>
+                        <li>Add or select a job</li>
+                        <li>Analyze keyword match</li>
+                        <li>Rewrite for optimization</li>
+                    </ul>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>

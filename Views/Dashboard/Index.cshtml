@@ -1,0 +1,259 @@
+@model ResumeTailorApp.Models.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<style>
+    .dashboard-page {
+        padding: 48px 0 70px;
+        background: linear-gradient(to bottom, #ffffff, #f8fbff);
+        min-height: calc(100vh - 160px);
+    }
+
+    .dashboard-header {
+        margin-bottom: 1.75rem;
+    }
+
+    .dashboard-header h1 {
+        font-size: 2.1rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: .4rem;
+    }
+
+    .dashboard-header p {
+        color: #64748b;
+        margin: 0;
+        line-height: 1.7;
+    }
+
+    .hero-card {
+        background: linear-gradient(135deg, #f8fbff, #eef4ff);
+        border: 1px solid #e2e8f0;
+        border-radius: 22px;
+        box-shadow: 0 20px 40px rgba(15,23,42,.06);
+        padding: 1.8rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .hero-card h2 {
+        font-size: 1.5rem;
+        font-weight: 800;
+        margin-bottom: .5rem;
+        color: #0f172a;
+    }
+
+    .hero-card p {
+        color: #64748b;
+        margin-bottom: 1rem;
+        line-height: 1.7;
+    }
+
+    .hero-actions {
+        display: flex;
+        gap: .8rem;
+        flex-wrap: wrap;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .stat-card,
+    .dash-card {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 22px;
+        box-shadow: 0 20px 40px rgba(15,23,42,.06);
+    }
+
+    .stat-card {
+        padding: 1.3rem;
+    }
+
+    .stat-label {
+        color: #64748b;
+        font-size: .95rem;
+        font-weight: 600;
+        margin-bottom: .4rem;
+    }
+
+    .stat-value {
+        color: #0f172a;
+        font-size: 2rem;
+        font-weight: 800;
+    }
+
+    .dash-layout {
+        display: grid;
+        grid-template-columns: 1.2fr .8fr;
+        gap: 1.5rem;
+    }
+
+    .dash-card {
+        padding: 1.5rem;
+    }
+
+    .dash-card h2 {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 1rem;
+    }
+
+    .version-item {
+        padding: 1rem 0;
+        border-bottom: 1px solid #eef2f7;
+    }
+
+    .version-item:last-child {
+        border-bottom: none;
+    }
+
+    .version-title {
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+    .version-sub {
+        color: #64748b;
+        font-size: .95rem;
+        margin-top: .2rem;
+    }
+
+    .empty-state h4 {
+        font-weight: 700;
+        margin-bottom: .4rem;
+        color: #0f172a;
+    }
+
+    .empty-state p {
+        color: #64748b;
+        margin-bottom: .8rem;
+        line-height: 1.7;
+    }
+
+    .quick-actions {
+        display: flex;
+        flex-direction: column;
+        gap: .85rem;
+    }
+
+    .action-btn {
+        display: block;
+        text-decoration: none;
+        padding: .95rem 1rem;
+        border-radius: 14px;
+        font-weight: 700;
+        transition: all .2s ease;
+    }
+
+    .action-primary {
+        background: #2563eb;
+        color: #fff;
+    }
+
+    .action-primary:hover {
+        background: #1d4ed8;
+        color: #fff;
+    }
+
+    .action-outline {
+        background: #fff;
+        color: #0f172a;
+        border: 1px solid #e2e8f0;
+    }
+
+    .action-outline:hover {
+        background: #f8fafc;
+        color: #0f172a;
+    }
+
+    @@media (max-width: 991.98px) {
+        .stats-grid,
+        .dash-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .hero-actions {
+            flex-direction: column;
+        }
+    }
+</style>
+
+<section class="dashboard-page">
+    <div class="container">
+        <div class="dashboard-header">
+            <h1>Welcome back, @Model.UserName</h1>
+            <p>Manage your resumes, target roles, AI rewrites, and saved versions from one clean workspace.</p>
+        </div>
+
+        <div class="hero-card">
+            <h2>Optimize your resume for your next job</h2>
+            <p>Upload your resume, paste a job description, and generate a tailored version in minutes.</p>
+
+            <div class="hero-actions">
+                <a href="/Resume/Create" class="action-btn action-outline">Add Resume</a>
+                <a href="/Job/Create" class="action-btn action-outline">Add Job Description</a>
+                <a href="/Match" class="action-btn action-primary">Optimize Resume</a>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Resumes Created</div>
+                <div class="stat-value">@Model.ResumeCount</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">Jobs Saved</div>
+                <div class="stat-value">@Model.JobCount</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">Optimized Versions</div>
+                <div class="stat-value">@Model.VersionCount</div>
+            </div>
+        </div>
+
+        <div class="dash-layout">
+            <div class="dash-card">
+                <h2>Latest saved versions</h2>
+
+                @if (Model.LatestVersions != null && Model.LatestVersions.Any())
+                {
+                    @foreach (var version in Model.LatestVersions)
+                    {
+                        <div class="version-item">
+                            <div class="version-title">@version.JobTitle</div>
+                            <div class="version-sub">Resume ID: @version.ResumeId</div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="empty-state">
+                        <h4>No optimized versions yet</h4>
+                        <p>Start by adding a resume and job description to generate your first tailored resume.</p>
+                        <a href="/Match" class="action-btn action-primary">Create First Version</a>
+                    </div>
+                }
+            </div>
+
+            <div class="dash-card">
+                <h2>Quick actions</h2>
+
+                <div class="quick-actions">
+                    <a href="/Resume/Create" class="action-btn action-outline">Add Resume</a>
+                    <a href="/Job/Create" class="action-btn action-outline">Add Job Description</a>
+                    <a href="/Match" class="action-btn action-primary">Run Match</a>
+                    <a href="/Resume/List" class="action-btn action-outline">View Resume Library</a>
+                    <a href="/ResumeVersion/List" class="action-btn action-outline">View Version History</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
